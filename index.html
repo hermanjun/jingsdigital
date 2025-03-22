@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jing’s Digital Garden</title>
+    <meta name="description" content="Jing’s Digital Garden - A space to explore, reflect, and share my journey.">
+    <meta property="og:title" content="Jing’s Digital Garden">
+    <meta property="og:description" content="A space to explore, reflect, and share my journey.">
+    <meta property="og:image" content="https://[your-username].github.io/jingsdigitalgarden/og-image.jpg">
+    <meta property="og:url" content="https://jingsweet.com"> <!-- Updated to jingsweet.com -->
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400&family=Noto+Sans+SC:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #D4BEE4;
+            font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+            color: #4A4A4A;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #EEEEEE;
+            position: relative;
+        }
+        h1 {
+            font-family: 'Poppins', 'Noto Sans SC', sans-serif;
+            font-weight: 600;
+            font-size: 2.2em;
+            color: #3B1E54;
+            margin: 0;
+        }
+        .language-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .language-toggle button {
+            background-color: #987EBD;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        .language-toggle button:hover {
+            background-color: #B39DDB;
+        }
+        .admin-logout {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: none;
+        }
+        .admin-logout.visible {
+            display: block;
+        }
+        .admin-logout button {
+            background-color: #987EBD;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        .admin-logout button:hover {
+            background-color: #B39DDB;
+        }
+        .section {
+            margin: 15px auto;
+            padding: 20px;
+            background-color: #EEEEEE;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+        h2 {
+            font-family: 'Poppins', 'Noto Sans SC', sans-serif;
+            color: #3B1E54;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #987EBD;
+            border-radius: 3px;
+            background-color: #F8F8FF;
+            color: #4A4A4A;
+        }
+        button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            background-color: #987EBD;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #B39DDB;
+        }
+        .social-links {
+            margin-top: 15px;
+        }
+        .social-links a {
+            color: #3B1E54;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #987EBD;
+            transform: scale(1.1);
+        }
+        #postDisplay {
+            margin: 15px auto;
+            width: 90%;
+            max-width: 600px;
+            text-align: left;
+        }
+        .post {
+            background-color: #EEEEEE;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .post h3 {
+            font-family: 'Poppins', 'Noto Sans SC', sans-serif;
+            color: #3B1E54;
+            margin: 0 0 5px;
+        }
+        .post .date {
+            font-size: 0.9em;
+            color: #4A4A4A;
+            margin-bottom: 10px;
+        }
+        .post p {
+            line-height: 1.6;
+        }
+        .delete-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #987EBD;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .delete-button:hover {
+            background-color: #B39DDB;
+            transform: scale(1.05);
+        }
+        #uploadSection {
+            display: none;
+        }
+        #uploadSection.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="headerTitle">Jing’s Digital Garden</h1>
+        <div class="admin-logout" id="adminLogout">
+            <button onclick="logoutAdmin()"></button>
+        </div>
+        <div class="language-toggle">
+            <button onclick="setLanguage('en')">English</button>
+            <button onclick="setLanguage('zh')">中文</button>
+        </div>
+    </header>
+    <div class="section">
+        <h2 id="aboutMeTitle">About Me</h2>
+        <p id="aboutMeContent">Hello, I’m Jing. Welcome to my little corner of the digital world! This is where I explore, reflect, and share bits of myself with the world. If you’re curious to know me, you’ll find everything that makes me me right here.</p>
+        <div class="social-links">
+            <a href="#" id="twitterLink" target="_blank">X</a>
+            <a href="#" id="linkedinLink" target="_blank">LinkedIn</a>
+            <a href="#" id="xiaohongshuLink" target="_blank">Xiaohongshu</a>
+            <a href="#" id="facebookLink" target="_blank">Facebook</a>
+        </div>
+    </div>
+    <div class="section">
+        <h2 id="postsTitle">Posts</h2>
+        <div id="uploadSection">
+            <input type="file" id="postFile" accept=".md">
+            <button onclick="uploadPost()" id="uploadButton">Upload Post</button>
+        </div>
+    </div>
+    <div id="postDisplay"></div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // Language content
+        const content = {
+            en: {
+                headerTitle: "Jing’s Digital Garden",
+                aboutMeTitle: "About Me",
+                aboutMeContent: "Hello, I’m Jing. Welcome to my little corner of the digital world! This is where I explore, reflect, and share bits of myself with the world. If you’re curious to know me, you’ll find everything that makes me me right here.",
+                postsTitle: "Posts",
+                uploadButton: "Upload Post",
+                deleteButton: "Delete",
+                adminButtonLogout: "Logout",
+                twitterLink: "X",
+                linkedinLink: "LinkedIn",
+                xiaohongshuLink: "Xiaohongshu",
+                facebookLink: "Facebook",
+                alertNoFile: "Please select a Markdown file to upload.",
+                alertInvalidFormat: "Invalid Markdown format. Please use frontmatter with title and date.",
+                alertMissingFields: "Markdown file must include title_en, title_zh, and date in frontmatter.",
+                alertMissingContent: "Markdown file must include content_en and content_zh sections.",
+                alertWrongPassword: "Incorrect password. Please try again."
+            },
+            zh: {
+                headerTitle: "竺璟小甜的数字花园",
+                aboutMeTitle: "关于我",
+                aboutMeContent: "嗨，我是竺璟小甜！欢迎来到我的数字花园～在这里，我会探索、思考，然后把我的点滴故事分享给大家。如果你想更了解我，这里就是我的全部啦！",
+                postsTitle: "我的分享",
+                uploadButton: "分享新内容",
+                deleteButton: "删除",
+                adminButtonLogout: "退出登录",
+                twitterLink: "X",
+                linkedinLink: "LinkedIn",
+                xiaohongshuLink: "小红书",
+                facebookLink: "脸书",
+                alertNoFile: "请上传一个Markdown文件！",
+                alertInvalidFormat: "Markdown格式不对，请确保有标题和日期哦～",
+                alertMissingFields: "Markdown文件需要有title_en、title_zh和date才行！",
+                alertMissingContent: "Markdown文件得包含content_en和content_zh两部分才可以哦～",
+                alertWrongPassword: "密码不对哦，请再试试～"
+            }
+        };
+
+        // Language and admin state management
+        let currentLang = localStorage.getItem('language') || 'en';
+        let isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+        // Check for admin query parameter on page load
+        function checkAdminAccess() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true' && !isAdmin) {
+                const password = prompt('Please enter the admin password:');
+                if (password === 'jing2025') {
+                    isAdmin = true;
+                    localStorage.setItem('isAdmin', 'true');
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } else {
+                    alert(content[currentLang].alertWrongPassword);
+                }
+            }
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+            updateContent();
+            loadPosts();
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            localStorage.setItem('isAdmin', 'false');
+            updateContent();
+            loadPosts();
+        }
+
+        function updateContent() {
+            document.getElementById('headerTitle').textContent = content[currentLang].headerTitle;
+            document.getElementById('aboutMeTitle').textContent = content[currentLang].aboutMeTitle;
+            document.getElementById('aboutMeContent').textContent = content[currentLang].aboutMeContent;
+            document.getElementById('postsTitle').textContent = content[currentLang].postsTitle;
+            document.getElementById('uploadButton').textContent = content[currentLang].uploadButton;
+            document.getElementById('twitterLink').textContent = content[currentLang].twitterLink;
+            document.getElementById('linkedinLink').textContent = content[currentLang].linkedinLink;
+            document.getElementById('xiaohongshuLink').textContent = content[currentLang].xiaohongshuLink;
+            document.getElementById('facebookLink').textContent = content[currentLang].facebookLink;
+
+            const adminLogout = document.getElementById('adminLogout');
+            adminLogout.querySelector('button').textContent = content[currentLang].adminButtonLogout;
+            if (isAdmin) {
+                adminLogout.classList.add('visible');
+            } else {
+                adminLogout.classList.remove('visible');
+            }
+
+            const uploadSection = document.getElementById('uploadSection');
+            if (isAdmin) {
+                uploadSection.classList.add('visible');
+            } else {
+                uploadSection.classList.remove('visible');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAdminAccess();
+            updateContent();
+            loadPosts();
+        });
+
+        function uploadPost() {
+            const fileInput = document.getElementById('postFile');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert(content[currentLang].alertNoFile);
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const post = parseMarkdown(content);
+                if (post) {
+                    savePost(post);
+                    loadPosts();
+                    fileInput.value = '';
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function parseMarkdown(content) {
+            const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
+            const match = content.match(frontmatterRegex);
+            if (!match) {
+                alert(content[currentLang].alertInvalidFormat);
+                return null;
+            }
+
+            const frontmatter = match[1];
+            const body = match[2];
+
+            const frontmatterLines = frontmatter.split('\n');
+            const metadata = {};
+            frontmatterLines.forEach(line => {
+                const [key, value] = line.split(':').map(part => part.trim());
+                if (key && value) {
+                    metadata[key] = value;
+                }
+            });
+
+            if (!metadata.title_en || !metadata.title_zh || !metadata.date) {
+                alert(content[currentLang].alertMissingFields);
+                return null;
+            }
+
+            const tags = metadata.tags ? metadata.tags.split(',').map(tag => tag.trim()) : [];
+
+            const contentSections = body.split('content_zh:');
+            const contentEn = contentSections[0].replace('content_en:', '').trim();
+            const contentZh = contentSections[1] ? contentSections[1].trim() : '';
+
+            if (!contentEn || !contentZh) {
+                alert(content[currentLang].alertMissingContent);
+                return null;
+            }
+
+            return {
+                title_en: metadata.title_en,
+                title_zh: metadata.title_zh,
+                date: metadata.date,
+                tags: tags,
+                content_en: marked.parse(contentEn),
+                content_zh: marked.parse(contentZh)
+            };
+        }
+
+        function savePost(post) {
+            let posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.push(post);
+            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            localStorage.setItem('posts', JSON.stringify(posts));
+        }
+
+        function deletePost(index) {
+            let posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.splice(index, 1);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+        }
+
+        function loadPosts() {
+            const postDisplay = document.getElementById('postDisplay');
+            postDisplay.innerHTML = '';
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.forEach((post, index) => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <h3>${currentLang === 'en' ? post.title_en : post.title_zh}</h3>
+                    <div class="date">${post.date}</div>
+                    <div><p>${currentLang === 'en' ? post.content_en : post.content_zh}</p></div>
+                    ${isAdmin ? `<button class="delete-button" onclick="deletePost(${index})">${content[currentLang].deleteButton}</button>` : ''}
+                `;
+                postDisplay.appendChild(postElement);
+            });
+        }
+    </script>
+</body>
+</html>
