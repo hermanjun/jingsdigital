@@ -1,5 +1,5 @@
 ---
-title_en: First Post: Why This Website Was Born
+title_en: "First Post: Why This Website Was Born"
 title_zh: "第一篇文章 - 本网站因何诞生"
 date: 2025-03-23
 tags: love, journey
