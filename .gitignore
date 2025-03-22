@@ -2,4 +2,4 @@
 .DS_Store
 
 # Ignore Obsidian configuration folder
-posts/.obsidian/
+posts/.obsidian/.obsidian/
